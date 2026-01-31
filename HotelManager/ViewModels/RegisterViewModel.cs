@@ -19,7 +19,7 @@ namespace HotelManager.ViewModels
 
         [Required(ErrorMessage = "Confirm Password is Required")]
         [DataType(DataType.Password)]
-        [Display (Name = "Confirm Password")]]
+        [Display (Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
     }
 }
