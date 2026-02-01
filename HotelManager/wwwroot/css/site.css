@@ -1,31 +1,165 @@
+
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #c19a6b !important;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f5f2;
+    padding-top: 80px;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+.btn-primary {
+    background-color: #c19a6b;
+    border-color: #c19a6b;
+}
+
+    .btn-primary:hover {
+        background-color: #a87d52;
+        border-color: #a87d52;
+    }
+
+.text-primary {
+    color: #1a3c40 !important;
+}
+
+.bg-primary {
+    background-color: #1a3c40 !important;
+}
+
+.border-primary {
+    border-color: #1a3c40 !important;
+}
+
+/* Card styles */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+/* Form styles */
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+}
+
+    .form-control:focus {
+        border-color: #c19a6b;
+        box-shadow: 0 0 0 0.2rem rgba(193, 154, 107, 0.25);
+    }
+
+/* Table styles */
+.table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+    .table thead {
+        background-color: #1a3c40;
+        color: white;
+    }
+
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+.container {
+    max-width: 1200px;
+}
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    body {
+        padding-top: 70px;
+    }
+}
+/* Currency Styles */
+.currency-banner {
+    background: rgba(46, 204, 113, 0.1);
+    padding: 10px 20px;
+    border-radius: 30px;
+    display: inline-block;
+    margin-bottom: 20px;
+    border: 2px solid #2ecc71;
+}
+
+    .currency-banner .badge {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+
+.room-price, .service-price, .price-display {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #2ecc71;
+    font-size: 1.3rem;
+}
+
+    .price-display::before {
+        content: "R ";
+    }
+
+
+.currency-selector {
+    background-color: #f8f5f2;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 4px solid #2ecc71;
+}
+
+    .currency-selector label {
+        font-weight: 600;
+        color: #1a3c40;
+        margin-right: 10px;
+    }
+
+.exchange-rate {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
 }

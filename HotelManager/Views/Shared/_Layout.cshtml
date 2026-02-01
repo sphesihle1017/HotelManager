@@ -3,36 +3,388 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HotelManager</title>
+    <title>@ViewData["Title"] - Azure Heights Hotel</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HotelManager.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        
+        html {
+            font-size: 14px;
+            position: relative;
+            min-height: 100%;
+        }
+
+        @@media (min-width: 768px) {
+            html
+
+        {
+            font-size: 16px;
+        }
+
+        }
+
+        .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+            box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #c19a6b !important;
+        }
+
+        body {
+            margin-bottom: 60px;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f5f2;
+            padding-top: 80px; /* Space for fixed navbar */
+        }
+
+        .form-floating > .form-control-plaintext::placeholder,
+        .form-floating > .form-control::placeholder {
+            color: var(--bs-secondary-color);
+            text-align: end;
+        }
+
+        .form-floating > .form-control-plaintext:focus::placeholder,
+        .form-floating > .form-control:focus::placeholder {
+            text-align: start;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #1a3c40;
+        }
+
+        /* Updated Header/Navbar */
+        header {
+            background-color: rgba(26, 60, 64, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            padding: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .container-fluid {
+            padding: 0 20px;
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem !important;
+            font-weight: 700;
+            color: white !important;
+            letter-spacing: 1px;
+            padding: 10px 0;
+        }
+
+            .navbar-brand:hover {
+                color: #c19a6b !important;
+            }
+
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 10px 20px !important;
+            margin: 0 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+            .navbar-nav .nav-link:hover,
+            .navbar-nav .nav-link.active {
+                color: white !important;
+                background-color: rgba(193, 154, 107, 0.2);
+            }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            padding: 5px 10px;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
+
+        .nav-item .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 8px 20px;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+            .nav-item .btn-outline-light:hover {
+                background-color: #c19a6b;
+                border-color: #c19a6b;
+                color: white;
+            }
+
+        .nav-item .btn-primary {
+            background-color: #c19a6b;
+            border-color: #c19a6b;
+            color: white;
+            padding: 8px 20px;
+            margin-left: 10px;
+        }
+
+            .nav-item .btn-primary:hover {
+                background-color: #a87d52;
+                border-color: #a87d52;
+            }
+
+        .container {
+            max-width: 1200px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        main {
+            min-height: calc(100vh - 200px);
+            padding: 20px 0;
+        }
+
+        footer {
+            background-color: #1a3c40 !important;
+            color: white !important;
+            border-top: none !important;
+            padding: 40px 0 !important;
+            margin-top: 60px;
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer a {
+            color: #c19a6b !important;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .footer a:hover {
+                color: #e6c9a3 !important;
+                text-decoration: underline;
+            }
+
+        .footer .text-muted {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        .hotel-btn-primary {
+            background: linear-gradient(to right, #c19a6b, #8b6b47);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+            .hotel-btn-primary:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+                background: linear-gradient(to right, #d4b48c, #9d7a52);
+                color: white;
+            }
+
+        .hotel-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+            .hotel-card:hover {
+                transform: translateY(-10px);
+            }
+
+        .hotel-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+            .section-title h2 {
+                font-size: 2.8rem;
+                margin-bottom: 15px;
+            }
+
+            .section-title p {
+                color: #666;
+                font-size: 1.1rem;
+                max-width: 700px;
+                margin: 0 auto;
+            }
+
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: -15px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 3px;
+                background: linear-gradient(to right, #c19a6b, #8b6b47);
+            }
+
+        /* Responsive Adjustments */
+        @@media (max-width: 768px) {
+            body
+
+        {
+            padding-top: 70px;
+        }
+
+        .navbar-nav {
+            background-color: rgba(26, 60, 64, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+            .navbar-nav .nav-link {
+                margin: 5px 0;
+                text-align: center;
+            }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c19a6b;
+            border-radius: 5px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #a87d52;
+            }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HotelManager</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-hotel me-2"></i>Azure Heights Hotel
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
+                     
 
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <partial name="_LoginPartial" />
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Admin">
+                                    <i class="fas fa-user-shield me-1"></i>Admin
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Admin">
+                                    <i class="fas fa-door-closed me-1"></i>Room Manager
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Admin">
+                                    <i class="fas fa-calendar-check me-1"></i>Bookings
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="User">
+                                    <i class="fas fa-calendar-alt me-1"></i>Reservations
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="User">
+                                    <i class="fas fa-map-marker-alt me-1"></i>Locations
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="User">
+                                    <i class="fas fa-users me-1"></i>Users
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="#about">About Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#rooms">
+                                    Our Rooms & Suites
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#services">
+                                    Hotel Services
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#contact">
+                                    Enquires
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#testimonials">
+                                    Testimonials
+                                </a>
+                            </li>
+                        }
                     </ul>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -41,12 +393,62 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - HotelManager - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-white mb-3">Azure Heights Hotel</h5>
+                    <p class="text-white-50">Luxury redefined. Experience the pinnacle of hospitality.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-1">
+                        <i class="fas fa-map-marker-alt me-2"></i>123 Luxury Avenue, Metropolis City
+                    </p>
+                    <p class="mb-1">
+                        <i class="fas fa-phone me-2"></i>+1 (555) 123-4567
+                    </p>
+                    <p class="mb-3">
+                        <i class="fas fa-envelope me-2"></i>reservations@azureheightshotel.com
+                    </p>
+                </div>
+            </div>
+            <hr class="my-4" style="border-color: gray;">
+       
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.backgroundColor = 'rgba(26, 60, 64, 0.98)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.backgroundColor = 'rgba(26, 60, 64, 0.95)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Set active nav link
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

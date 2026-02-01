@@ -1,8 +1,10 @@
+using HotelManager.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using HotelManager.Models;
-using Microsoft.AspNetCore.Mvc;
 
-namespace HotelManager.Controllers
+namespace UserRoles.Controllers
 {
     public class HomeController : Controller
     {
@@ -18,7 +20,20 @@ namespace HotelManager.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Admin()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "User")]
+        public IActionResult User()
         {
             return View();
         }

@@ -1,8 +1,843 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Heights Hotel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f5f2;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #1a3c40;
+        }
+
+        section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+            .section-title h2 {
+                font-size: 2.8rem;
+                margin-bottom: 15px;
+            }
+
+            .section-title p {
+                color: #666;
+                font-size: 1.1rem;
+                max-width: 700px;
+                margin: 0 auto;
+            }
+
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: -15px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 3px;
+                background: linear-gradient(to right, #c19a6b, #8b6b47);
+            }
+
+        /* Hero Section */
+        .hero-section {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+            .hero-content h1 {
+                font-size: 4rem;
+                margin-bottom: 20px;
+                color: white;
+                text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            }
+
+            .hero-content p {
+                font-size: 1.3rem;
+                margin-bottom: 35px;
+                line-height: 1.8;
+                max-width: 700px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(to right, #c19a6b, #8b6b47);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+            .cta-button:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+                background: linear-gradient(to right, #d4b48c, #9d7a52);
+            }
+
+        /* About Section */
+        .about-section {
+            background-color: white;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+            .about-text h2 {
+                font-size: 2.5rem;
+                margin-bottom: 25px;
+            }
+
+            .about-text p {
+                margin-bottom: 20px;
+                color: #555;
+                font-size: 1.05rem;
+            }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 45%;
+        }
+
+        .feature-icon {
+            color: #c19a6b;
+            font-size: 1.5rem;
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+            .about-image img {
+                width: 100%;
+                height: 400px;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+
+            .about-image:hover img {
+                transform: scale(1.05);
+            }
+
+        /* Rooms Section */
+        .rooms-section {
+            background-color: #f8f5f2;
+        }
+
+        .rooms-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .room-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+            .room-card:hover {
+                transform: translateY(-10px);
+            }
+
+        .room-image {
+            height: 250px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+            .room-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+
+        .room-card:hover .room-image img {
+            transform: scale(1.1);
+        }
+
+        .room-info {
+            padding: 25px;
+        }
+
+            .room-info h3 {
+                font-size: 1.6rem;
+                margin-bottom: 10px;
+            }
+
+        .room-price {
+            color: #c19a6b;
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .room-features {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+            .room-features span {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+        /* Services Section */
+        .services-section {
+            background-color: white;
+        }
+
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background-color: #f8f5f2;
+            border-radius: 10px;
+            padding: 40px 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+            .service-card:hover {
+                background-color: #1a3c40;
+                color: white;
+                transform: translateY(-10px);
+            }
+
+                .service-card:hover h3,
+                .service-card:hover p,
+                .service-card:hover .service-icon {
+                    color: white;
+                }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: #c19a6b;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            background-color: #f8f5f2;
+        }
+
+        .testimonials-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial-slide {
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .guest-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .guest-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+            .guest-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .guest-details h4 {
+            margin-bottom: 5px;
+        }
+
+        .guest-details p {
+            color: #c19a6b;
+            font-weight: 500;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background-color: white;
+        }
+
+        .contact-container {
+            display: flex;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+            .contact-info h2 {
+                font-size: 2.5rem;
+                margin-bottom: 25px;
+            }
+
+        .contact-details {
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #f8f5f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c19a6b;
+            font-size: 1.2rem;
+        }
+
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f8f5f2;
+            padding: 40px;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #c19a6b;
+            }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #1a3c40;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+            .footer-social a {
+                color: white;
+                font-size: 1.5rem;
+                transition: color 0.3s ease;
+            }
+
+                .footer-social a:hover {
+                    color: #c19a6b;
+                }
+
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Animations */
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        /* Responsive Styles */
+        @@media (max-width: 768px) {
+            .hero-content h1
+
+        {
+            font-size: 2.8rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+        }
+
+        .features {
+            flex-direction: column;
+        }
+
+        .feature-item {
+            width: 100%;
+        }
+
+        .rooms-container {
+            grid-template-columns: 1fr;
+        }
+
+        .contact-container {
+            flex-direction: column;
+        }
+
+        .contact-form {
+            padding: 30px 20px;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Azure Heights Hotel</h1>
+            <p>Experience luxury redefined at our award-winning hotel. Nestled in the heart of the city, we offer unparalleled comfort, world-class amenities, and unforgettable moments.</p>
+            <a asp-controller="Appointment" asp-action="Create" class="cta-button">Book Your </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="section-title">
+            <h2>About Our Hotel</h2>
+            <p>Discover the story behind our luxurious accommodations and exceptional service that has made us a favorite among discerning travelers.</p>
+        </div>
+
+        <div class="about-content">
+            <div class="about-text">
+                <h2>A Legacy of Luxury and Comfort</h2>
+                <p>Since 1995, Azure Heights Hotel has been synonymous with elegance and exceptional hospitality. Our commitment to providing an unforgettable experience has made us a preferred destination for travelers worldwide.</p>
+                <p>We combine contemporary design with timeless elegance, creating spaces that are both luxurious and welcoming. Every detail is carefully curated to ensure your stay is nothing short of perfect.</p>
+
+                <div class="features">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-wifi"></i></div>
+                        <div>High-Speed Wi-Fi</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-swimming-pool"></i></div>
+                        <div>Infinity Pool</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-utensils"></i></div>
+                        <div>Fine Dining Restaurant</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-spa"></i></div>
+                        <div>Luxury Spa & Wellness</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Hotel Lobby">
+            </div>
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section class="rooms-section" id="rooms">
+        <div class="section-title">
+            <h2>Our Rooms & Suites</h2>
+            <p>Each room and suite is designed with your comfort in mind, blending luxury with modern amenities for a perfect stay.</p>
+        </div>
+
+        <div class="rooms-container">
+            <div class="room-card">
+                <div class="room-image">
+                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Deluxe Room">
+                </div>
+                <div class="room-info">
+                    <h3>Deluxe Room</h3>
+                    <div class="room-price">R1 350 / night</div>
+                    <div class="room-features">
+                        <span><i class="fas fa-user-friends"></i> 2 Guests</span>
+                        <span><i class="fas fa-bed"></i> King Bed</span>
+                        <span><i class="fas fa-ruler-combined"></i> 45 m²</span>
+                    </div>
+                    <p>Elegant room with panoramic city views, premium bedding, and a marble bathroom with luxury amenities.</p>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-image">
+                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Executive Suite">
+                </div>
+                <div class="room-info">
+                    <h3>Executive Suite</h3>
+                    <div class="room-price">R1 875 / night</div>
+                    <div class="room-features">
+                        <span><i class="fas fa-user-friends"></i> 3 Guests</span>
+                        <span><i class="fas fa-bed"></i> King Bed + Sofa</span>
+                        <span><i class="fas fa-ruler-combined"></i> 70 m²</span>
+                    </div>
+                    <p>Spacious suite with separate living area, premium workspace, and exclusive access to executive lounge.</p>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-image">
+                    <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80" alt="Presidential Suite">
+                </div>
+                <div class="room-info">
+                    <h3>Presidential Suite</h3>
+                    <div class="room-price">R 2 500 / night</div>
+                    <div class="room-features">
+                        <span><i class="fas fa-user-friends"></i> 4 Guests</span>
+                        <span><i class="fas fa-bed"></i> 2 King Beds</span>
+                        <span><i class="fas fa-ruler-combined"></i> 120 m²</span>
+                    </div>
+                    <p>Our most luxurious offering with panoramic views, private dining area, and personalized butler service.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section" id="services">
+        <div class="section-title">
+            <h2>Hotel Services</h2>
+            <p>We offer a wide range of services designed to make your stay memorable and comfortable.</p>
+        </div>
+
+        <div class="services-container">
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-utensils"></i></div>
+                <h3>Fine Dining</h3>
+                <p>Experience culinary excellence at our award-winning restaurants with world-class chefs.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-spa"></i></div>
+                <h3>Spa & Wellness</h3>
+                <p>Rejuvenate your mind and body with our luxurious spa treatments and wellness programs.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-swimming-pool"></i></div>
+                <h3>Infinity Pool</h3>
+                <p>Relax by our stunning infinity pool with breathtaking views of the city skyline.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-dumbbell"></i></div>
+                <h3>Fitness Center</h3>
+                <p>Stay active with our state-of-the-art fitness equipment and personal training sessions.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-concierge-bell"></i></div>
+                <h3>Concierge Service</h3>
+                <p>Our dedicated concierge team is available 24/7 to assist with all your needs.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-car"></i></div>
+                <h3>Transportation</h3>
+                <p>Complimentary luxury car service to key destinations within the city.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="section-title">
+            <h2>Guest Reviews</h2>
+            <p>Discover what our guests have to say about their experience at Azure Heights Hotel.</p>
+        </div>
+
+        <div class="testimonials-container">
+            <div class="testimonial-slide">
+                <div class="testimonial-text">
+                    "Our stay at Azure Heights was absolutely magnificent. The attention to detail, exceptional service, and luxurious amenities made this our best hotel experience ever. We will definitely be returning!"
+                </div>
+                <div class="guest-info">
+                    <div class="guest-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b786d4d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Guest">
+                    </div>
+                    <div class="guest-details">
+                        <h4>Sarah Johnson</h4>
+                        <p>Business Traveler</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="section-title">
+            <h2>Contact Us</h2>
+            <p>Get in touch with us for reservations, inquiries, or special requests. We're here to assist you.</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Get in Touch</h2>
+                <p>We'd love to hear from you. Whether you have a question about our rooms, services, or just want to say hello, feel free to contact us.</p>
+
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <h4>Address</h4>
+                            <p>123 Luxury Avenue, Downtown District<br>Metropolis City, MC 10001</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>reservations@azureheightshotel.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h3>Send a Message</h3>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" class="form-control" placeholder="Your Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="Your Email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="Your Phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" placeholder="How can we help you?" required></textarea>
+                    </div>
+
+                    <button type="submit" class="cta-button">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            
+            <p>Luxury redefined. Experience the pinnacle of hospitality.</p>
+
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2023 Azure Heights Hotel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Form submission handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            // Show confirmation message
+            alert(`Thank you, ${name}! We have received your message and will contact you at ${email} shortly.`);
+
+            // Reset form
+            document.getElementById('contactForm').reset();
+        });
+
+        // Room booking buttons
+        document.querySelectorAll('.cta-button').forEach(button => {
+            if(button.textContent.includes('Book Your Stay')) {
+                button.addEventListener('click', function(e) {
+                    if(this.getAttribute('href') === '#contact') {
+                        e.preventDefault();
+                        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+        });
+
+        // Add animation to elements when they come into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 1s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections for animation
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
