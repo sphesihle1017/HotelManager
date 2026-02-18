@@ -72,15 +72,22 @@ namespace UserRoles.Controllers
 
             if (result.Succeeded)
             {
-                var roleExist = await roleManager.RoleExistsAsync("User");
+                // Map selected role to system role
+                var selectedRole = model.Role;
+                if (selectedRole == "Customer")
+                {
+                    selectedRole = "User"; // Map Customer to User role
+                }
+
+                var roleExist = await roleManager.RoleExistsAsync(selectedRole);
 
                 if (!roleExist)
                 {
-                    var role = new IdentityRole("User");
+                    var role = new IdentityRole(selectedRole);
                     await roleManager.CreateAsync(role);
                 }
 
-                await userManager.AddToRoleAsync(user, "User");
+                await userManager.AddToRoleAsync(user, selectedRole);
 
                 await signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Login", "Account");
