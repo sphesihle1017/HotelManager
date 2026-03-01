@@ -163,3 +163,16 @@ body {
     color: #666;
     margin-top: 5px;
 }
+/* Light price display - normal weight and size */
+.price-display-light {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400; 
+    color: #2ecc71;
+    font-size: 1rem; 
+}
+
+    .price-display-light::before {
+        content: "R ";
+        font-weight: 400;
+        color: #2ecc71;
+    }

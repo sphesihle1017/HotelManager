@@ -3,6 +3,8 @@
     Layout = "_Layout";
 }
 
+@using HotelManager.Models
+
 <div class="container mt-4">
     <h1 class="mb-4">Admin Dashboard</h1>
 
@@ -15,17 +17,17 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <a asp-action="ManageCustomers" class="btn btn-outline-primary btn-lg btn-block">
+                            <a asp-action="ManageCustomers" class="btn btn-outline-primary btn-lg btn-block w-100 mb-2">
                                 <i class="bi bi-people"></i> Manage Customers
                             </a>
                         </div>
                         <div class="col-md-4">
-                            <a asp-action="Rooms" class="btn btn-outline-success btn-lg btn-block">
+                            <a asp-action="Rooms" class="btn btn-outline-success btn-lg btn-block w-100 mb-2">
                                 <i class="bi bi-door-open"></i> Manage Rooms
                             </a>
                         </div>
                         <div class="col-md-4">
-                            <a asp-action="CreateRoom" class="btn btn-outline-warning btn-lg btn-block">
+                            <a asp-action="CreateRoom" class="btn btn-outline-warning btn-lg btn-block w-100 mb-2">
                                 <i class="bi bi-plus-circle"></i> Create New Room
                             </a>
                         </div>
@@ -35,18 +37,34 @@
         </div>
     </div>
 
+    <!-- Display Success/Error Messages -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <!-- Tab Navigation -->
     <ul class="nav nav-tabs" id="adminTab" role="tablist">
         <li class="nav-item">
             <button class="nav-link active" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers"
-                type="button" role="tab">
-                <i class="bi bi-people"></i> Customers
+                    type="button" role="tab">
+                <i class="bi bi-people"></i> Recent Customers
             </button>
         </li>
         <li class="nav-item">
             <button class="nav-link" id="rooms-tab" data-bs-toggle="tab" data-bs-target="#rooms" type="button"
-                role="tab">
-                <i class="bi bi-door-open"></i> Rooms
+                    role="tab">
+                <i class="bi bi-door-open"></i> Recent Rooms
             </button>
         </li>
     </ul>
@@ -57,29 +75,62 @@
         <div class="tab-pane fade show active" id="customers" role="tabpanel">
             <div class="card mt-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Customer Management</h4>
+                    <h4 class="mb-0">Recent Customers</h4>
                     <a asp-action="ManageCustomers" class="btn btn-sm btn-primary">View All Customers</a>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted">Manage customer accounts, view their booking history, and handle
-                        account-related issues.</p>
+                    <p class="text-muted">
+                        Manage customer accounts, view their booking history, and handle
+                        account-related issues.
+                    </p>
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
                                     <th>Email</th>
+                                    <th>Phone</th>
                                     <th>Total Bookings</th>
-                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted">
-                                        No customers found. (Database integration pending)
-                                    </td>
-                                </tr>
+                                @if (ViewBag.RecentCustomers != null && ViewBag.RecentCustomers.Count > 0)
+                                {
+                                    @foreach (var customer in ViewBag.RecentCustomers)
+                                    {
+                                        <tr>
+                                            <td>@customer.FirstName @customer.LastName</td>
+                                            <td>@customer.Email</td>
+                                            <td>@customer.PhoneNumber</td>
+                                            <td>
+                                                <span class="badge bg-info">@(customer.Bookings?.Count ?? 0)</span>
+                                            </td>
+                                            <td>
+                                                <a asp-action="CustomerDetails" asp-route-id="@customer.CustomerId"
+                                                   class="btn btn-sm btn-info" title="View Details">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <form asp-action="DeleteCustomer" asp-route-id="@customer.CustomerId"
+                                                      method="post" style="display:inline;"
+                                                      onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">
+                                            No customers found.
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -91,7 +142,7 @@
         <div class="tab-pane fade" id="rooms" role="tabpanel">
             <div class="card mt-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Room Management</h4>
+                    <h4 class="mb-0">Recent Rooms</h4>
                     <div>
                         <a asp-action="CreateRoom" class="btn btn-sm btn-success">
                             <i class="bi bi-plus-circle"></i> Add New Room
@@ -105,19 +156,50 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Room Number</th>
+                                    <th>Hotel</th>
                                     <th>Room Type</th>
-                                    <th>Price</th>
-                                    <th>Availability</th>
+                                    <th>Price/Night</th>
+                                    <th>Bookings</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted">
-                                        No rooms found. (Database integration pending)
-                                    </td>
-                                </tr>
+                                @if (ViewBag.RecentRooms != null && ViewBag.RecentRooms.Count > 0)
+                                {
+                                    @foreach (var room in ViewBag.RecentRooms)
+                                    {
+                                        <tr>
+                                            <td>@room.Hotel?.Name</td>
+                                            <td>@room.RoomDescription</td>
+                                            <td>R @room.PricePerNight.ToString("N2")</td>
+                                            <td>
+                                                <span class="badge bg-info">@(room.Bookings?.Count ?? 0)</span>
+                                            </td>
+                                            <td>
+                                                <a asp-action="EditRoom" asp-route-id="@room.RoomId"
+                                                   class="btn btn-sm btn-warning" title="Edit">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <form asp-action="DeleteRoom" asp-route-id="@room.RoomId"
+                                                      method="post" style="display:inline;"
+                                                      onsubmit="return confirm('Are you sure you want to delete this room?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">
+                                            No rooms found.
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>

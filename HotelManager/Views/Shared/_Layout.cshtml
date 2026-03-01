@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        
         html {
             font-size: 14px;
             position: relative;
@@ -19,12 +18,15 @@
         }
 
         @@media (min-width: 768px) {
-            html
-
-        {
-            font-size: 16px;
+            html {
+                font-size: 16px;
+            }
         }
 
+        @@media (min-width: 1200px) {
+            html {
+                font-size: 18px;
+            }
         }
 
         .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -37,7 +39,14 @@
             line-height: 1.6;
             color: #333;
             background-color: #f8f5f2;
-            padding-top: 80px; /* Space for fixed navbar */
+            padding-top: 80px;
+        }
+
+        @@media (max-width: 576px) {
+            body {
+                padding-top: 70px;
+                font-size: 14px;
+            }
         }
 
         .form-floating > .form-control-plaintext::placeholder,
@@ -57,7 +66,26 @@
             color: #1a3c40;
         }
 
-        /* Updated Header/Navbar */
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+        }
+
+        h2 {
+            font-size: clamp(1.75rem, 4vw, 2.8rem);
+        }
+
+        h3 {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+        }
+
+        h4 {
+            font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+        }
+
+        h5 {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+        }
+
         header {
             background-color: rgba(26, 60, 64, 0.98);
             backdrop-filter: blur(10px);
@@ -71,7 +99,7 @@
 
         .navbar {
             padding: 0;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -79,18 +107,42 @@
             padding: 0 20px;
         }
 
+        @@media (max-width: 768px) {
+            .container-fluid {
+                padding: 0 15px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .container-fluid {
+                padding: 0 10px;
+            }
+        }
+
         .navbar-brand {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem !important;
+            font-size: clamp(1.4rem, 4vw, 1.8rem) !important;
             font-weight: 700;
             color: white !important;
             letter-spacing: 1px;
             padding: 10px 0;
+            white-space: normal;
+            line-height: 1.2;
         }
 
-            .navbar-brand:hover {
-                color: #c19a6b !important;
+        @@media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1.2rem !important;
             }
+
+                .navbar-brand i {
+                    font-size: 1rem;
+                }
+        }
+
+        .navbar-brand:hover {
+            color: #c19a6b !important;
+        }
 
         .navbar-nav .nav-link {
             color: rgba(255, 255, 255, 0.9) !important;
@@ -99,13 +151,21 @@
             margin: 0 5px;
             border-radius: 5px;
             transition: all 0.3s ease;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
-            .navbar-nav .nav-link:hover,
-            .navbar-nav .nav-link.active {
-                color: white !important;
-                background-color: rgba(193, 154, 107, 0.2);
+        @@media (max-width: 992px) {
+            .navbar-nav .nav-link {
+                padding: 8px 15px !important;
+                margin: 0 3px;
             }
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: white !important;
+            background-color: rgba(193, 154, 107, 0.2);
+        }
 
         .navbar-toggler {
             border-color: rgba(255, 255, 255, 0.3) !important;
@@ -122,13 +182,9 @@
             padding: 8px 20px;
             margin-left: 10px;
             transition: all 0.3s ease;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            white-space: nowrap;
         }
-
-            .nav-item .btn-outline-light:hover {
-                background-color: #c19a6b;
-                border-color: #c19a6b;
-                color: white;
-            }
 
         .nav-item .btn-primary {
             background-color: #c19a6b;
@@ -136,22 +192,56 @@
             color: white;
             padding: 8px 20px;
             margin-left: 10px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            white-space: nowrap;
         }
 
-            .nav-item .btn-primary:hover {
-                background-color: #a87d52;
-                border-color: #a87d52;
+        @@media (max-width: 768px) {
+            .nav-item .btn-outline-light,
+            .nav-item .btn-primary {
+                padding: 6px 15px;
+                margin: 5px 0;
+                width: 100%;
+                text-align: center;
             }
+        }
+
+        .nav-item .btn-primary:hover {
+            background-color: #a87d52;
+            border-color: #a87d52;
+        }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             padding: 20px;
             margin-top: 20px;
+            width: 100%;
+        }
+
+        @@media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin-top: 10px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .container {
+                padding: 10px;
+                margin-top: 5px;
+            }
         }
 
         main {
             min-height: calc(100vh - 200px);
             padding: 20px 0;
+        }
+
+        @@media (max-width: 768px) {
+            main {
+                min-height: calc(100vh - 180px);
+                padding: 10px 0;
+            }
         }
 
         footer {
@@ -162,8 +252,22 @@
             margin-top: 60px;
         }
 
+        @@media (max-width: 768px) {
+            footer {
+                padding: 30px 0 !important;
+                margin-top: 40px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            footer {
+                padding: 20px 0 !important;
+                margin-top: 30px;
+            }
+        }
+
         .footer .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -183,6 +287,22 @@
             color: rgba(255, 255, 255, 0.7) !important;
         }
 
+        @@media (max-width: 768px) {
+            .footer .row > div {
+                text-align: center !important;
+                margin-bottom: 20px;
+            }
+
+            .footer .text-md-end {
+                text-align: center !important;
+            }
+
+            .social-icons {
+                justify-content: center;
+                display: flex;
+            }
+        }
+
         .hotel-btn-primary {
             background: linear-gradient(to right, #c19a6b, #8b6b47);
             color: white;
@@ -194,12 +314,19 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-            .hotel-btn-primary:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-                background: linear-gradient(to right, #d4b48c, #9d7a52);
-                color: white;
+        @@media (max-width: 576px) {
+            .hotel-btn-primary {
+                padding: 10px 20px;
+                font-size: 0.9rem;
             }
+        }
+
+        .hotel-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to right, #d4b48c, #9d7a52);
+            color: white;
+        }
 
         .hotel-card {
             background: white;
@@ -215,8 +342,14 @@
 
         .hotel-section {
             padding: 80px 20px;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+        }
+
+        @@media (max-width: 768px) {
+            .hotel-section {
+                padding: 40px 15px;
+            }
         }
 
         .section-title {
@@ -225,62 +358,85 @@
             position: relative;
         }
 
-            .section-title h2 {
-                font-size: 2.8rem;
-                margin-bottom: 15px;
-            }
-
-            .section-title p {
-                color: #666;
-                font-size: 1.1rem;
-                max-width: 700px;
-                margin: 0 auto;
-            }
-
-            .section-title::after {
-                content: '';
-                position: absolute;
-                bottom: -15px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 80px;
-                height: 3px;
-                background: linear-gradient(to right, #c19a6b, #8b6b47);
-            }
-
-        /* Responsive Adjustments */
         @@media (max-width: 768px) {
-            body
-
-        {
-            padding-top: 70px;
-        }
-
-        .navbar-nav {
-            background-color: rgba(26, 60, 64, 0.95);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-
-            .navbar-nav .nav-link {
-                margin: 5px 0;
-                text-align: center;
+            .section-title {
+                margin-bottom: 40px;
             }
+        }
 
         .section-title h2 {
-            font-size: 2.2rem;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
         }
 
-        .container {
-            padding: 15px;
+        @@media (max-width: 768px) {
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
         }
 
+        @@media (max-width: 576px) {
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
         }
 
-        /* Custom scrollbar */
+        .section-title p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        @@media (max-width: 576px) {
+            .section-title p {
+                font-size: 0.95rem;
+            }
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, #c19a6b, #8b6b47);
+        }
+
+        @@media (max-width: 576px) {
+            .section-title::after {
+                width: 60px;
+                height: 2px;
+                bottom: -10px;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .navbar-nav {
+                background-color: rgba(26, 60, 64, 0.95);
+                padding: 20px;
+                border-radius: 10px;
+                margin-top: 10px;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+                .navbar-nav .nav-link {
+                    margin: 5px 0;
+                    text-align: center;
+                }
+        }
+
         ::-webkit-scrollbar {
             width: 10px;
+        }
+
+        @@media (max-width: 768px) {
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
         }
 
         ::-webkit-scrollbar-track {
@@ -295,6 +451,25 @@
             ::-webkit-scrollbar-thumb:hover {
                 background: #a87d52;
             }
+
+        /* Table responsiveness */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Card grid responsiveness */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        @@media (max-width: 480px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -310,74 +485,70 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                     
-
-                        @if (User.IsInRole("Admin"))
+                        @if (!User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Admin">
-                                    <i class="fas fa-user-shield me-1"></i>Admin
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Admin">
-                                    <i class="fas fa-door-closed me-1"></i>Room Manager
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Admin">
-                                    <i class="fas fa-calendar-check me-1"></i>Bookings
-                                </a>
-                            </li>
-                        }
-                        @if (User.IsInRole("User"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="User">
-                                    <i class="fas fa-calendar-alt me-1"></i>Reservations
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="User">
-                                    <i class="fas fa-map-marker-alt me-1"></i>Locations
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="User">
-                                    <i class="fas fa-users me-1"></i>Users
-                                </a>
-                            </li>
-                        }
-               @*          else
-                        {
+                            <!-- Public menu items - shown only when not logged in -->
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
-
                             <li class="nav-item">
                                 <a class="nav-link" href="#about">About Us</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#rooms">
-                                    Our Rooms & Suites
+                                <a class="nav-link" href="#rooms">Our Rooms & Suites</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#services">Hotel Services</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#contact">Enquiries</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <!-- Admin menu items -->
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Dashboard" asp-action="Admin">
+                                    <i class="fas fa-user-shield me-1"></i>Admin Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#services">
-                                    Hotel Services
+                                <a class="nav-link" asp-controller="Dashboard" asp-action="Rooms">
+                                    <i class="fas fa-door-closed me-1"></i>Room Manager
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#contact">
-                                    Enquires
+                                <a class="nav-link" asp-controller="Dashboard" asp-action="ManageCustomers">
+                                    <i class="fas fa-users me-1"></i>Customers
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#testimonials">
-                                    Testimonials
+                                <a class="nav-link" asp-controller="Dashboard" asp-action="Bookings">
+                                    <i class="fas fa-calendar-check me-1"></i>All Bookings
                                 </a>
                             </li>
-                        } *@
+                        }
+
+                        @if (User.IsInRole("User"))
+                        {
+                            <!-- User menu items -->
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Dashboard" asp-action="AvailableRooms">
+                                    <i class="fas fa-calendar-alt me-1"></i>Book a Room
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Dashboard" asp-action="MyBookings">
+                                    <i class="fas fa-history me-1"></i>My Bookings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#locations">
+                                    <i class="fas fa-map-marker-alt me-1"></i>Locations
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -416,8 +587,16 @@
                     </p>
                 </div>
             </div>
-            <hr class="my-4" style="border-color: gray;">
-       
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; @DateTime.Now.Year - Azure Heights Hotel. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white-50 me-3">Privacy Policy</a>
+                    <a href="#" class="text-white-50">Terms of Service</a>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -439,12 +618,43 @@
 
         // Set active nav link
         document.addEventListener('DOMContentLoaded', function() {
-            const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll('.nav-link');
+            const currentPath = window.location.pathname.toLowerCase();
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
 
             navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
+                const href = link.getAttribute('href')?.toLowerCase() || '';
+                if (href === currentPath ||
+                    (currentPath.includes('/dashboard/') && href.includes(currentPath.split('/').pop()))) {
                     link.classList.add('active');
+                }
+            });
+        });
+
+        // Close mobile menu when clicking a link
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 768) {
+                        bsCollapse.hide();
+                    }
+                });
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
         });
