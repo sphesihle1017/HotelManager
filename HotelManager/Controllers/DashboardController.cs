@@ -218,6 +218,7 @@ namespace HotelManager.Controllers
         }
 
         // POST: /Dashboard/EditRoom/{id} - Edit room (Admin only)
+      
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -228,27 +229,86 @@ namespace HotelManager.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                // Remove navigation properties from ModelState validation
+                ModelState.Remove("Hotel");
+                ModelState.Remove("Bookings");
+
+                // Manual validation
+                if (room.HotelId <= 0)
                 {
-                    _context.Update(room);
-                    await _context.SaveChangesAsync();
-                    TempData["Success"] = "Room updated successfully!";
+                    ModelState.AddModelError("HotelId", "Please select a hotel.");
                 }
-                catch (DbUpdateConcurrencyException)
+
+                if (string.IsNullOrEmpty(room.RoomDescription))
                 {
-                    if (!RoomExists(room.RoomId))
+                    ModelState.AddModelError("RoomDescription", "Please select a room type.");
+                }
+                else if (!new[] { "Deluxe", "Premium", "Presidential" }.Contains(room.RoomDescription))
+                {
+                    ModelState.AddModelError("RoomDescription", "Invalid room type selected.");
+                }
+
+                if (room.PricePerNight <= 0)
+                {
+                    ModelState.AddModelError("PricePerNight", "Price must be greater than 0.");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    // Check if hotel exists
+                    var hotelExists = await _context.Hotels.AnyAsync(h => h.HotelId == room.HotelId);
+                    if (!hotelExists)
+                    {
+                        ModelState.AddModelError("HotelId", "Selected hotel does not exist.");
+                        ViewBag.Hotels = await _context.Hotels.ToListAsync();
+                        return View(room);
+                    }
+
+                    // Get the existing room from database
+                    var existingRoom = await _context.Rooms
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(r => r.RoomId == id);
+
+                    if (existingRoom == null)
                     {
                         return NotFound();
                     }
-                    else
+
+                    // Update only the fields that should be changed
+                    existingRoom = new Room
                     {
-                        throw;
-                    }
+                        RoomId = id,
+                        HotelId = room.HotelId,
+                        RoomDescription = room.RoomDescription,
+                        PricePerNight = room.PricePerNight
+                    };
+
+                    _context.Update(existingRoom);
+                    await _context.SaveChangesAsync();
+
+                    TempData["Success"] = $"Room {id} updated successfully!";
+                    return RedirectToAction(nameof(Rooms));
                 }
-                return RedirectToAction(nameof(Rooms));
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                if (!RoomExists(room.RoomId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    TempData["Error"] = $"Concurrency error: {ex.Message}";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Error updating room: {ex.Message}";
+            }
+
+            // If we got this far, something failed, redisplay form
             ViewBag.Hotels = await _context.Hotels.ToListAsync();
             return View(room);
         }
