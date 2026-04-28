@@ -25,11 +25,13 @@ namespace HotelManager.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.Hotels = await _context.Hotels.OrderBy(h => h.Name).ToListAsync();
+
             var rooms = await _context.Rooms
                 .Include(r => r.Hotel)
                 .OrderBy(r => r.Hotel.Name)
                 .ThenBy(r => r.PricePerNight)
                 .ToListAsync();
+
             return View(rooms);
         }
 
@@ -38,138 +40,136 @@ namespace HotelManager.Controllers
             var room = await _context.Rooms
                 .Include(r => r.Hotel)
                 .FirstOrDefaultAsync(r => r.RoomId == id);
+
             if (room == null) return NotFound();
 
-            // Get all booked dates for this room
             ViewBag.BookedDates = await _context.Bookings
                 .Where(b => b.RoomId == id)
-                .Select(b => new { b.CheckInDate, b.CheckOutDate })
+                .Select(b => new
+                {
+                    b.CheckInDate,
+                    b.CheckOutDate
+                })
                 .ToListAsync();
 
             return View(room);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CheckAvailability(int roomId, DateTime checkIn, DateTime checkOut)
+        // =========================
+        // DTOs
+        // =========================
+        public class AvailabilityRequest
         {
-            // Use .Date to ignore any time component
-            DateTime checkInDate = checkIn.Date;
-            DateTime checkOutDate = checkOut.Date;
+            public int RoomId { get; set; }
+            public DateTime CheckIn { get; set; }
+            public DateTime CheckOut { get; set; }
+        }
 
-            if (checkInDate < DateTime.Today)
-                return Json(new { available = false, message = "Check-in date cannot be in the past." });
+        public class BookingRequest
+        {
+            public int RoomId { get; set; }
+            public DateTime CheckIn { get; set; }
+            public DateTime CheckOut { get; set; }
 
-            if (checkOutDate <= checkInDate)
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Email { get; set; }
+            public string PhoneNumber { get; set; }
+        }
+
+        // =========================
+        // CHECK AVAILABILITY
+        // =========================
+        [HttpPost]
+        public async Task<IActionResult> CheckAvailability([FromBody] AvailabilityRequest request)
+        {
+            var checkIn = request.CheckIn.Date;
+            var checkOut = request.CheckOut.Date;
+
+            if (checkIn < DateTime.Today)
+                return Json(new { available = false, message = "Check-in cannot be in the past." });
+
+            if (checkOut <= checkIn)
                 return Json(new { available = false, message = "Check-out must be after check-in." });
 
-            // Check for overlapping bookings
-            var isBooked = await _context.Bookings
-                .AnyAsync(b => b.RoomId == roomId
-                            && b.CheckInDate < checkOutDate
-                            && b.CheckOutDate > checkInDate);
+            bool isBooked = await _context.Bookings.AnyAsync(b =>
+                b.RoomId == request.RoomId &&
+                b.CheckInDate < checkOut &&
+                b.CheckOutDate > checkIn);
 
             if (isBooked)
-                return Json(new { available = false, message = "Room is not available for these dates." });
+                return Json(new { available = false, message = "Room is not available." });
 
-            var room = await _context.Rooms.FindAsync(roomId);
-            if (room == null)
-                return Json(new { available = false, message = "Room not found." });
+            var room = await _context.Rooms.FindAsync(request.RoomId);
 
-            int nights = (int)(checkOutDate - checkInDate).Days;
-            decimal totalPrice = nights * room.PricePerNight;
+            int nights = (checkOut - checkIn).Days;
 
             return Json(new
             {
                 available = true,
-                nights = nights,
-                pricePerNight = room.PricePerNight,
-                totalPrice = totalPrice,
+                nights,
+                totalPrice = nights * room.PricePerNight,
                 message = "Room is available!"
             });
         }
 
+        // =========================
+        // BOOK ROOM
+        // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> BookRoom(
-            int roomId,
-            DateTime checkIn,
-            DateTime checkOut,
-            string firstName,
-            string lastName,
-            string email,
-            string phoneNumber)
+        public async Task<IActionResult> BookRoom([FromForm] BookingRequest request)
         {
             try
             {
-                // Use .Date to ignore any time component
-                DateTime checkInDate = checkIn.Date;
-                DateTime checkOutDate = checkOut.Date;
+                var checkIn = request.CheckIn.Date;
+                var checkOut = request.CheckOut.Date;
 
-                // Validate customer fields
-                if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) ||
-                    string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(phoneNumber))
-                    return Json(new { success = false, message = "All customer fields are required." });
+                if (checkIn < DateTime.Today)
+                    return Json(new { success = false, message = "Invalid check-in date." });
 
-                if (!email.Contains("@") || !email.Contains("."))
-                    return Json(new { success = false, message = "Invalid email address." });
-
-                if (!System.Text.RegularExpressions.Regex.IsMatch(phoneNumber, @"^0[0-9]{9}$"))
-                    return Json(new { success = false, message = "Phone number must be 10 digits and start with 0." });
-
-                var user = await _userManager.GetUserAsync(User);
-                if (user == null)
-                    return Json(new { success = false, message = "User not authenticated." });
-
-                if (checkInDate < DateTime.Today)
-                    return Json(new { success = false, message = "Check-in date cannot be in the past." });
-
-                if (checkOutDate <= checkInDate)
-                    return Json(new { success = false, message = "Check-out must be after check-in." });
+                if (checkOut <= checkIn)
+                    return Json(new { success = false, message = "Invalid check-out date." });
 
                 var room = await _context.Rooms
                     .Include(r => r.Hotel)
-                    .FirstOrDefaultAsync(r => r.RoomId == roomId);
+                    .FirstOrDefaultAsync(r => r.RoomId == request.RoomId);
+
                 if (room == null)
                     return Json(new { success = false, message = "Room not found." });
 
-                // Final availability check
-                var isBooked = await _context.Bookings
-                    .AnyAsync(b => b.RoomId == roomId
-                                && b.CheckInDate < checkOutDate
-                                && b.CheckOutDate > checkInDate);
-                if (isBooked)
-                    return Json(new { success = false, message = "Room is no longer available for these dates." });
+                bool isBooked = await _context.Bookings.AnyAsync(b =>
+                    b.RoomId == request.RoomId &&
+                    b.CheckInDate < checkOut &&
+                    b.CheckOutDate > checkIn);
 
-                // Find or create customer
-                var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email);
+                if (isBooked)
+                    return Json(new { success = false, message = "Room already booked." });
+
+                var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == request.Email);
+
                 if (customer == null)
                 {
                     customer = new Customer
                     {
-                        FirstName = firstName.Trim(),
-                        LastName = lastName.Trim(),
-                        Email = email.Trim(),
-                        PhoneNumber = phoneNumber.Trim()
+                        FirstName = request.FirstName,
+                        LastName = request.LastName,
+                        Email = request.Email,
+                        PhoneNumber = request.PhoneNumber
                     };
+
                     _context.Customers.Add(customer);
                     await _context.SaveChangesAsync();
                 }
-                else
-                {
-                    customer.FirstName = firstName.Trim();
-                    customer.LastName = lastName.Trim();
-                    customer.PhoneNumber = phoneNumber.Trim();
-                    _context.Customers.Update(customer);
-                    await _context.SaveChangesAsync();
-                }
 
-                int nights = (int)(checkOutDate - checkInDate).Days;
+                int nights = (checkOut - checkIn).Days;
+
                 var booking = new Booking
                 {
-                    RoomId = roomId,
+                    RoomId = request.RoomId,
                     CustomerId = customer.CustomerId,
-                    CheckInDate = checkInDate,
-                    CheckOutDate = checkOutDate,
+                    CheckInDate = checkIn,
+                    CheckOutDate = checkOut,
                     TotalAmount = nights * room.PricePerNight
                 };
 
@@ -179,27 +179,14 @@ namespace HotelManager.Controllers
                 return Json(new
                 {
                     success = true,
-                    message = $"Booking confirmed! {room.RoomDescription} Room at {room.Hotel.Name}",
+                    message = "Booking confirmed successfully!",
                     bookingId = booking.BookingId
                 });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "An error occurred: " + ex.Message });
+                return Json(new { success = false, message = ex.Message });
             }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetBookedDates(int roomId)
-        {
-            var bookedDates = await _context.Bookings
-                .Where(b => b.RoomId == roomId)
-                .Select(b => new {
-                    checkIn = b.CheckInDate.ToString("yyyy-MM-dd"),
-                    checkOut = b.CheckOutDate.ToString("yyyy-MM-dd")
-                })
-                .ToListAsync();
-            return Json(bookedDates);
         }
     }
 }

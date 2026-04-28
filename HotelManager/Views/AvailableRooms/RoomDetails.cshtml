@@ -96,88 +96,96 @@
 @section Scripts {
     <script>
         const roomId = @Model.RoomId;
-        let currentAvailability = { available: false, checkIn: null, checkOut: null };
+        let availabilityState = { available: false, checkIn: null, checkOut: null };
 
-        document.getElementById("checkAvailabilityBtn").addEventListener("click", async function() {
+        // ======================
+        // CHECK AVAILABILITY
+        // ======================
+        document.getElementById("checkAvailabilityBtn").addEventListener("click", async function () {
+
             const checkIn = document.getElementById("checkIn").value;
             const checkOut = document.getElementById("checkOut").value;
+
             const resultDiv = document.getElementById("availabilityResult");
 
             if (!checkIn || !checkOut) {
-                resultDiv.innerHTML = "<span class='text-danger'>Please select both dates.</span>";
-                currentAvailability.available = false;
+                resultDiv.innerHTML = "<span class='text-danger'>Select both dates.</span>";
                 return;
             }
 
-            // Send dates with T00:00:00 to ensure proper DateTime binding
             const response = await fetch("/AvailableRooms/CheckAvailability", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]').value
+                    "RequestVerificationToken":
+                        document.querySelector('input[name="__RequestVerificationToken"]').value
                 },
                 body: JSON.stringify({
                     roomId: roomId,
-                    checkIn: checkIn + "T00:00:00",
-                    checkOut: checkOut + "T00:00:00"
+                    checkIn: checkIn,
+                    checkOut: checkOut
                 })
             });
+
             const data = await response.json();
 
             if (data.available) {
-                resultDiv.innerHTML = "<span class='text-success'>" + data.message + " Total: " + data.totalPrice + " for " + data.nights + " nights.</span>";
-                currentAvailability = { available: true, checkIn: checkIn, checkOut: checkOut };
+                resultDiv.innerHTML =
+                    `<span class="text-success">
+                        ${data.message} | ${data.nights} nights | Total: R${data.totalPrice}
+                    </span>`;
+
+                availabilityState = {
+                    available: true,
+                    checkIn: checkIn,
+                    checkOut: checkOut
+                };
+
+                document.getElementById("bookNowBtn").disabled = false;
+
             } else {
-                resultDiv.innerHTML = "<span class='text-danger'>" + data.message + "</span>";
-                currentAvailability.available = false;
+                resultDiv.innerHTML = `<span class="text-danger">${data.message}</span>`;
+                availabilityState.available = false;
+                document.getElementById("bookNowBtn").disabled = true;
             }
         });
 
-        document.getElementById("bookNowBtn").addEventListener("click", async function() {
-            if (!currentAvailability.available) {
-                alert("Please select check-in and check-out dates and click 'Check Availability' first.");
-                return;
-            }
 
-            const firstName = document.getElementById("firstName").value.trim();
-            const lastName = document.getElementById("lastName").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const phoneNumber = document.getElementById("phoneNumber").value.trim();
+        // ======================
+        // BOOK ROOM
+        // ======================
+        document.getElementById("bookNowBtn").addEventListener("click", async function () {
 
-            if (!firstName || !lastName || !email || !phoneNumber) {
-                alert("All customer fields are required.");
-                return;
-            }
-            if (!/^0[0-9]{9}$/.test(phoneNumber)) {
-                alert("Phone number must be 10 digits and start with 0.");
+            if (!availabilityState.available) {
+                alert("Check availability first.");
                 return;
             }
 
             const formData = new URLSearchParams();
-            formData.append("roomId", roomId);
-            // Add T00:00:00 to dates for proper binding
-            formData.append("checkIn", currentAvailability.checkIn + "T00:00:00");
-            formData.append("checkOut", currentAvailability.checkOut + "T00:00:00");
-            formData.append("firstName", firstName);
-            formData.append("lastName", lastName);
-            formData.append("email", email);
-            formData.append("phoneNumber", phoneNumber);
+            formData.append("RoomId", roomId);
+            formData.append("CheckIn", availabilityState.checkIn);
+            formData.append("CheckOut", availabilityState.checkOut);
+            formData.append("FirstName", document.getElementById("firstName").value);
+            formData.append("LastName", document.getElementById("lastName").value);
+            formData.append("Email", document.getElementById("email").value);
+            formData.append("PhoneNumber", document.getElementById("phoneNumber").value);
 
             const response = await fetch("/AvailableRooms/BookRoom", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]').value
+                    "RequestVerificationToken":
+                        document.querySelector('input[name="__RequestVerificationToken"]').value
                 },
                 body: formData
             });
+
             const data = await response.json();
 
             if (data.success) {
                 alert(data.message);
                 location.reload();
             } else {
-                alert("Error: " + data.message);
+                alert(data.message);
             }
         });
     </script>
